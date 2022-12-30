@@ -24,14 +24,14 @@ For now support:
 Compatible with Selenium 4.x and below.
 
 Before:
-You should download binary chromedriver, unzip it somewhere in you PC and set path to this driver like this:
+You need to download the chromedriver binary, unzip it somewhere on your PC and set the path to this driver like this:
 
 ```python
 from selenium import webdriver
 driver = webdriver.Chrome('/home/user/drivers/chromedriver')
 ```
 
-It’s boring!!! Moreover every time the new version of driver released, you should go and repeat all steps again and again.
+It’s boring!!! Moreover, every time a new version of the driver is released, you need to repeat all these steps again and again.
 
 With webdriver manager, you just need to do two simple steps:
 
@@ -223,6 +223,15 @@ import os
 os.environ['WDM_LOG'] = str(logging.NOTSET)
 ```
 
+### `WDM_PROGRESS_BAR`
+Turn off the progress bar which is displayed on downloads:
+
+```python
+import os
+
+os.environ['WDM_PROGRESS_BAR'] = str(0)
+```
+
 ### `WDM_LOCAL`
 By default, all driver binaries are saved to user.home/.wdm folder. You can override this setting and save binaries to project.root/.wdm.
 
@@ -267,6 +276,26 @@ from webdriver_manager.chrome import ChromeDriverManager
 ChromeDriverManager("2.26", cache_valid_range=1).install()
 ```
 
+---
+
+### Custom Logger
+
+If you need to use a custom logger, you can create a logger and set it with `set_logger()`.
+
+```python
+import logging
+from webdriver_manager.core.logger import set_logger
+
+logger = logging.getLogger("custom_logger")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+logger.addHandler(logging.FileHandler("custom.log"))
+
+set_logger(logger)
+```
+
+---
+
 ### Custom HTTP Client
 If you need to add custom HTTP logic like session or proxy you can define your custom HttpClient implementation.
 
@@ -297,6 +326,8 @@ def test_can_get_chrome_driver_with_custom_http_client():
     path = ChromeDriverManager(download_manager=download_manager).install()
     assert os.path.exists(path)
 ```
+
+---
 
 This will make your test automation more elegant and robust!
 
